@@ -7,12 +7,17 @@ const deletarResidencias = require('./deletarResidencias')
 
 function menu() {
     console.log(`Bem vindo! O que deseja?\n1. Listar residencias\n2. Adicionar residencias\n3. Editar residencias\n4. Deletar residencias\n5. Sair`)
-    let opcao = prompt("Escolha uma opçâo: ")
+    const opcao = prompt("Escolha uma opçâo: ")
+    let index
 
     switch (opcao) {
         case '1':
-            listarResidencias()
-            menu()
+            if(residencias.length === 0) {
+                console.log('Não há residencias cadastradas.')
+            } else {
+                listarResidencias()
+                menu()
+            }
             break;
         case '2':
             let nome = prompt("Diga o nome do proprietário: ")
@@ -28,17 +33,30 @@ function menu() {
                 console.log("Não há residencias cadastradas!")
                 menu()
             } else {
-            editarResidencias(prompt)
-            menu()
-            }
+                listarResidencias()
+                index = parseInt(prompt('Qual residencia deseja editar? ')) - 1
+                if (index >= 0 && index < residencias.length) {
+                    novoNome = prompt("Digite um novo nome: ")
+                    novoBairro = prompt("Digite um novo bairro: ")
+                    novaRua = prompt("Digite uma nova rua: ")
+                    novoNumero = prompt("Digite um novo numero: ")
+                    editarResidencias(index, {nome: novoNome, bairro: novoBairro, rua: novaRua, numero: novoNumero})
+                    console.log('Residencia atualizada com sucesso!')
+                menu()
+            } else {
+                console.log('Opção inválida!')
+            }} 
             break;
         case '4':
             if (residencias === 0) {
                 console.log("Não há residencias cadastradas.")
                 menu()
             } else {
-            deletarResidencias(prompt)
-            menu()
+                listarResidencias()
+                index = parseInt(prompt("Digite o número da residencia que deseja editar: ")) - 1
+                deletarResidencias(index)
+                console.log('Residencia removida com sucesso!')
+                menu()
             }
             break;
         case '5':
